@@ -37,13 +37,16 @@ async fn process_socket(mut socket: TcpStream) -> Result<()> {
 async fn aworker() {
     println!("Running a worker job");
     loop {
+        // Give other tasks a chance to work
         let count = get_count().await;
         heavy_stuff(count);
+        tokio::task::yield_now().await;
     }
 }
 
 async fn get_count() -> u64 {
-    20000000
+    //20000000
+    200000
 }
 
 fn heavy_stuff(count: u64) -> u64 {
